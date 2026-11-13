@@ -4,13 +4,15 @@ Pytest configuration and fixtures for FastAPI tests.
 Provides shared fixtures including TestClient for API testing.
 """
 
+from copy import deepcopy
+
 import pytest
 from fastapi.testclient import TestClient
-from src.app import app
+from src import app as app_module
 
 
 @pytest.fixture
-def client():
+def client(monkeypatch):
     """
     Fixture that provides a TestClient for testing the FastAPI application.
     
@@ -20,7 +22,9 @@ def client():
     Yields:
         TestClient: A client configured for the FastAPI app
     """
-    return TestClient(app)
+    monkeypatch.setattr(app_module, "activities", deepcopy(app_module.activities))
+    with TestClient(app_module.app) as test_client:
+        yield test_client
 
 
 @pytest.fixture
