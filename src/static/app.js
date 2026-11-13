@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear loading message
       activitiesList.innerHTML = "";
 
+      const selectedActivity = activitySelect.value;
+      const placeholder = activitySelect.querySelector('option[value=""]');
+      activitySelect.replaceChildren();
+      if (placeholder) activitySelect.appendChild(placeholder);
+
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
         const activityCard = document.createElement("div");
@@ -57,6 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
         option.textContent = name;
         activitySelect.appendChild(option);
       });
+
+      if ([...activitySelect.options].some(option => option.value === selectedActivity)) {
+        activitySelect.value = selectedActivity;
+      }
 
       // Add event listeners for delete buttons
       document.querySelectorAll(".delete-participant").forEach((button) => {
