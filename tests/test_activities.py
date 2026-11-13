@@ -17,11 +17,13 @@ class TestActivitiesEndpoint:
         
         Arrange: TestClient is provided by fixture
         Act: Make GET request to /activities endpoint
-        Assert: Response contains 3 activities (Chess Club, Programming Class, Gym Class)
+        Assert: Response contains all nine activities
         """
         # Arrange
-        expected_activity_count = 3
-        expected_activities = ["Chess Club", "Programming Class", "Gym Class"]
+        expected_activities = {
+            "Chess Club", "Programming Class", "Gym Class", "Basketball Club",
+            "Track and Field", "Art Club", "Drama Club", "Debate Club", "Science Club",
+        }
         
         # Act
         response = client.get("/activities")
@@ -29,8 +31,7 @@ class TestActivitiesEndpoint:
         
         # Assert
         assert response.status_code == 200
-        assert len(data) == expected_activity_count
-        assert all(activity in data for activity in expected_activities)
+        assert set(data) == expected_activities
 
     def test_get_activities_returns_valid_json(self, client):
         """

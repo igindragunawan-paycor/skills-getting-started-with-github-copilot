@@ -10,7 +10,7 @@ Tests are structured using the AAA (Arrange-Act-Assert) pattern for clarity and 
 Pytest configuration file that provides shared fixtures used across all test files.
 
 **Fixtures:**
-- `client`: TestClient for making HTTP requests to the FastAPI application
+- `client`: TestClient for making HTTP requests with isolated activity state per test
 - `sample_activity`: Sample activity data for testing
 
 ### tests/test_app.py
@@ -24,7 +24,7 @@ Tests for the root endpoint (GET /).
 Tests for the activities endpoint (GET /activities).
 
 **Test Cases:**
-- test_get_activities_returns_all_activities: Verifies all 3 activities are returned
+- test_get_activities_returns_all_activities: Verifies all 9 activities are returned
 - test_get_activities_returns_valid_json: Validates JSON response format
 - test_activity_contains_required_fields: Checks for required fields in each activity
 - test_activity_fields_have_correct_types: Validates data types of activity fields
@@ -108,12 +108,12 @@ def test_successful_signup_for_valid_activity(self, client, sample_activity):
 
 ## Test Coverage
 
-Current test coverage: **100%** of src/app.py
-
-All endpoints and code paths are tested:
+The existing suite covers:
 - ✅ GET / - Root endpoint redirect
 - ✅ GET /activities - All activities retrieval
 - ✅ POST /activities/{activity_name}/signup - Student signup
+
+The unregistration endpoint and duplicate-signup validation are not yet covered.
 
 ## Dependencies
 
@@ -132,7 +132,7 @@ pip install -r requirements.txt
 
 1. **Clear naming**: Test names clearly describe what is being tested
 2. **Single responsibility**: Each test verifies one specific behavior
-3. **No side effects**: Tests use TestClient which doesn't persist state
+3. **No side effects**: The client fixture isolates the in-memory activity state for each test
 4. **Descriptive docstrings**: Each test includes a docstring explaining the test
 5. **Fixtures over setup**: Use pytest fixtures for test data and client initialization
 6. **AAA pattern**: All tests follow Arrange-Act-Assert structure
