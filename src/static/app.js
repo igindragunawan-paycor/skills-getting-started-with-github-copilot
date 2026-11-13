@@ -22,7 +22,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Create participants list HTML
         const participantsHTML = details.participants.length > 0
-          ? `<ul class="participants-list">${details.participants.map(p => `<li><span class="participant-email">${p}</span><button class="delete-participant" data-activity="${name}" data-email="${p}" aria-label="Remove ${p}">✕</button></li>`).join("")}</ul>`
+          ? `<ul class="participants-list">${details.participants.map(p => {
+              const item = document.createElement("li");
+              const emailSpan = document.createElement("span");
+              emailSpan.className = "participant-email";
+              emailSpan.textContent = p;
+              const removeButton = document.createElement("button");
+              removeButton.className = "delete-participant";
+              removeButton.dataset.activity = name;
+              removeButton.dataset.email = p;
+              removeButton.setAttribute("aria-label", `Remove ${p}`);
+              removeButton.textContent = "✕";
+              item.append(emailSpan, removeButton);
+              return item.outerHTML;
+            }).join("")}</ul>`
           : `<p class="no-participants">No participants yet</p>`;
 
         activityCard.innerHTML = `
